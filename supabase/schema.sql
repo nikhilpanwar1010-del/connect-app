@@ -271,6 +271,13 @@ values
 on conflict (id) do update set public = true;
 
 -- Storage policies: Authenticated users can upload and read
+drop policy if exists "Public can view avatars" on storage.objects;
+drop policy if exists "Authenticated users can upload avatars" on storage.objects;
+drop policy if exists "Public can view chat-media" on storage.objects;
+drop policy if exists "Authenticated users can upload chat-media" on storage.objects;
+drop policy if exists "Public can view memories" on storage.objects;
+drop policy if exists "Authenticated users can upload memories" on storage.objects;
+
 create policy "Public can view avatars"
   on storage.objects for select
   using (bucket_id = 'avatars');
@@ -299,9 +306,30 @@ create policy "Authenticated users can upload memories"
 -- REALTIME SUBSCRIPTIONS
 -- Enable real-time websocket broadcasting for tables
 -- =========================================================================
-alter publication supabase_realtime add table public.messages;
-alter publication supabase_realtime add table public.reactions;
-alter publication supabase_realtime add table public.memories;
-alter publication supabase_realtime add table public.room_members;
-alter publication supabase_realtime add table public.profiles;
-alter publication supabase_realtime add table public.proposals;
+do $$
+begin
+  begin
+    alter publication supabase_realtime add table public.messages;
+  exception when duplicate_object then null;
+  end;
+  begin
+    alter publication supabase_realtime add table public.reactions;
+  exception when duplicate_object then null;
+  end;
+  begin
+    alter publication supabase_realtime add table public.memories;
+  exception when duplicate_object then null;
+  end;
+  begin
+    alter publication supabase_realtime add table public.room_members;
+  exception when duplicate_object then null;
+  end;
+  begin
+    alter publication supabase_realtime add table public.profiles;
+  exception when duplicate_object then null;
+  end;
+  begin
+    alter publication supabase_realtime add table public.proposals;
+  exception when duplicate_object then null;
+  end;
+end $$;
