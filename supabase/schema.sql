@@ -6,6 +6,15 @@
 -- Enable UUID extension
 create extension if not exists "uuid-ossp";
 
+-- Drop old incompatible tables if they exist from previous tests
+drop table if exists public.reactions cascade;
+drop table if exists public.messages cascade;
+drop table if exists public.room_members cascade;
+drop table if exists public.rooms cascade;
+drop table if exists public.memories cascade;
+drop table if exists public.proposals cascade;
+drop table if exists public.profiles cascade;
+
 -- 1. PROFILES TABLE
 -- Extends Supabase auth.users with public profile information
 create table if not exists public.profiles (
