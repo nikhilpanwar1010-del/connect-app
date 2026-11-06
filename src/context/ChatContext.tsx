@@ -18,6 +18,7 @@ interface ChatContextType {
   currentLoveQuote: string;
   createRoom: (name?: string, passcode?: string) => Promise<Room>;
   joinRoom: (inviteCode: string, passcode?: string) => Promise<{ success: boolean; error?: string }>;
+  leaveRoom: () => void;
   sendMessage: (content: string, type?: MessageType, mediaUrl?: string, replyToId?: string) => Promise<void>;
   editMessage: (messageId: string, newContent: string) => Promise<void>;
   deleteMessage: (messageId: string) => Promise<void>;
@@ -685,6 +686,15 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('proposal_answered_' + inviteCode, answer);
   };
 
+  // Leave room / sign out of active room
+  const leaveRoom = useCallback(() => {
+    setActiveRoom(null);
+    setPartner(null);
+    setMessages([]);
+    setMemories([]);
+    localStorage.removeItem(LOCAL_ROOM_KEY);
+  }, []);
+
   return (
     <ChatContext.Provider
       value={{
@@ -700,6 +710,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
         currentLoveQuote,
         createRoom,
         joinRoom,
+        leaveRoom,
         sendMessage,
         editMessage,
         deleteMessage,

@@ -27,6 +27,7 @@ export const App: React.FC = () => {
     currentLoveQuote,
     createRoom,
     joinRoom,
+    leaveRoom,
     sendMessage,
     editMessage,
     deleteMessage,
@@ -112,6 +113,12 @@ export const App: React.FC = () => {
     setShowProposal(true);
   };
 
+  // Sign out of both room and user session
+  const handleSignOut = async () => {
+    leaveRoom();
+    await signOut();
+  };
+
   // Get wallpaper background classes
   const getThemeBackground = () => {
     if (isDarkMode || wallpaperTheme === 'midnight-rose') {
@@ -151,8 +158,8 @@ export const App: React.FC = () => {
     );
   }
 
-  // 2. If no active room yet, show Landing Page with zero friction onboarding
-  if (!activeRoom) {
+  // 2. If no user or no active room yet, show Landing Page with zero friction onboarding
+  if (!user || !activeRoom) {
     return (
       <LandingPage
         onJoinRoom={joinRoom}
@@ -181,7 +188,7 @@ export const App: React.FC = () => {
         onOpenLoveNotes={() => setIsLoveNotesOpen(true)}
         onTriggerThinkingOfYou={sendThinkingOfYou}
         onReplayProposal={handleReplayProposal}
-        onSignOut={signOut}
+        onSignOut={handleSignOut}
       />
 
       {/* Main Messages Area */}

@@ -27,7 +27,7 @@ begin
   insert into public.profiles (id, name, avatar_url)
   values (
     new.id,
-    coalesce(new.raw_user_meta_data->>'name', split_part(new.email, '@', 1)),
+    coalesce(new.raw_user_meta_data->>'name', split_part(new.email, '@', 1), 'My Sweetheart 💕'),
     coalesce(new.raw_user_meta_data->>'avatar_url', null)
   )
   on conflict (id) do nothing;

@@ -196,10 +196,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Zero-friction instant sign in
   const signInAsGuest = async (name: string, isPartner = false) => {
+    const displayName = name || (isPartner ? 'My Sweetheart' : 'Me 💕');
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase.auth.signInAnonymously({
+          options: {
+            data: { name: displayName }
+          }
+        });
+        if (!error && data?.user) {
+          await fetchProfile(data.user.id);
+          return;
+        }
+      } catch (err) {
+        console.warn('Anonymous sign-in not available, using local guest fallback:', err);
+      }
+    }
+
     const id = isPartner ? 'guest-partner-456' : 'guest-me-123';
     const guestUser: Profile = {
       id,
-      name: name || (isPartner ? 'My Sweetheart' : 'Me 💕'),
+      name: displayName,
       avatar_url: isPartner ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80' : 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80',
       bio: 'In our little corner of the world 🌸',
       status_message: 'Always here for you 💕',
@@ -238,8 +256,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signOut = async () => {
     setUser(null);
     localStorage.removeItem(LOCAL_USER_KEY);
+    localStorage.removeItem('our_little_space_active_room');
     if (isSupabaseConfigured) {
-      await supabase.auth.signOut();
+      try {
+        await supabase.auth.signOut();
+      } catch (err) {
+        console.warn('Supabase sign out error:', err);
+      }
     }
   };
 
