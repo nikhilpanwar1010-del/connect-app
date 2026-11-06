@@ -152,16 +152,23 @@ create policy "Users can insert their own profile"
   on public.profiles for insert
   with check (auth.uid() = id);
 
+-- Security definer helper to prevent infinite RLS recursion on room_members
+create or replace function public.is_room_member(_room_id uuid, _user_id uuid)
+returns boolean as $$
+begin
+  return exists (
+    select 1 from public.room_members
+    where room_id = _room_id and user_id = _user_id
+  );
+end;
+$$ language plpgsql security definer set search_path = public;
+
 -- Rooms: Members can view their rooms. Anyone authenticated can look up a room by invite code to join.
 create policy "Users can view rooms they belong to or by invite code"
   on public.rooms for select
   using (
     auth.uid() = created_by or
-    exists (
-      select 1 from public.room_members
-      where room_members.room_id = rooms.id
-      and room_members.user_id = auth.uid()
-    ) or
+    public.is_room_member(id, auth.uid()) or
     auth.role() = 'authenticated' -- allows resolving invite code
   );
 
@@ -177,12 +184,8 @@ create policy "Room creators can update their rooms"
 create policy "Members can view room roster"
   on public.room_members for select
   using (
-    exists (
-      select 1 from public.room_members as rm
-      where rm.room_id = room_members.room_id
-      and rm.user_id = auth.uid()
-    ) or
-    user_id = auth.uid()
+    user_id = auth.uid() or
+    public.is_room_member(room_id, auth.uid())
   );
 
 create policy "Users can join rooms"
@@ -193,22 +196,14 @@ create policy "Users can join rooms"
 create policy "Room members can read messages"
   on public.messages for select
   using (
-    exists (
-      select 1 from public.room_members
-      where room_members.room_id = messages.room_id
-      and room_members.user_id = auth.uid()
-    )
+    public.is_room_member(room_id, auth.uid())
   );
 
 create policy "Room members can send messages"
   on public.messages for insert
   with check (
     auth.uid() = sender_id and
-    exists (
-      select 1 from public.room_members
-      where room_members.room_id = messages.room_id
-      and room_members.user_id = auth.uid()
-    )
+    public.is_room_member(room_id, auth.uid())
   );
 
 create policy "Senders can edit their own messages"
@@ -225,9 +220,8 @@ create policy "Room members can read reactions"
   using (
     exists (
       select 1 from public.messages
-      join public.room_members on room_members.room_id = messages.room_id
       where messages.id = reactions.message_id
-      and room_members.user_id = auth.uid()
+      and public.is_room_member(messages.room_id, auth.uid())
     )
   );
 
@@ -243,22 +237,14 @@ create policy "Users can delete their reactions"
 create policy "Room members can view memories"
   on public.memories for select
   using (
-    exists (
-      select 1 from public.room_members
-      where room_members.room_id = memories.room_id
-      and room_members.user_id = auth.uid()
-    )
+    public.is_room_member(room_id, auth.uid())
   );
 
 create policy "Room members can upload memories"
   on public.memories for insert
   with check (
     auth.uid() = user_id and
-    exists (
-      select 1 from public.room_members
-      where room_members.room_id = memories.room_id
-      and room_members.user_id = auth.uid()
-    )
+    public.is_room_member(room_id, auth.uid())
   );
 
 create policy "Users can delete their memories"
