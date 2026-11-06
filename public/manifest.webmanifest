@@ -1,0 +1,18 @@
+{
+  "name": "Our Little Space",
+  "short_name": "Little Space",
+  "description": "Our private, romantic corner made just for the two of us 💕",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF0F6",
+  "theme_color": "#FF4D8D",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

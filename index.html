@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    
+    <!-- Theme & Mobile App Meta Tags -->
+    <meta name="theme-color" content="#FF4D8D" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Our Little Space" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- SEO & Social Open Graph Tags (WhatsApp, iMessage, Instagram) -->
+    <title>Our Little Space 💕 | Our Private World</title>
+    <meta name="description" content="A private romantic sanctuary made just for the two of us. Real-time chat, shared memories, love notes, and sweet moments." />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Our Little Space 💕 | Made Just For You" />
+    <meta property="og:description" content="A private, beautiful space for our late-night chats, shared laughs, and memories." />
+    <meta property="og:image" content="/og-image.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Our Little Space 💕" />
+    <meta name="twitter:description" content="A private romantic chat sanctuary made with all my love." />
+    <meta name="twitter:image" content="/og-image.svg" />
+
+    <!-- Google Fonts: Dancing Script, Nunito, Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#FFF0F6] text-slate-800 antialiased selection:bg-pink-300 selection:text-pink-900 overflow-x-hidden min-h-screen">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Register service worker for PWA offline capabilities
+      if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+  </body>
+</html>

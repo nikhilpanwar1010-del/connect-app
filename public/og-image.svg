@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF5293"/>
+      <stop offset="50%" stop-color="#FFA0B8"/>
+      <stop offset="100%" stop-color="#8E0A40"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>
+      <stop offset="100%" stop-color="rgba(255,240,246,0.9)"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="16" stdDeviation="24" flood-color="#550020" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Decorative floating glowing hearts -->
+  <circle cx="150" cy="120" r="180" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="1050" cy="500" r="220" fill="rgba(255,255,255,0.06)"/>
+
+  <!-- Center Glass Card -->
+  <rect x="150" y="85" width="900" height="460" rx="40" fill="url(#cardGrad)" filter="url(#shadow)"/>
+  <rect x="150" y="85" width="900" height="460" rx="40" fill="none" stroke="#FFB3CF" stroke-width="3"/>
+
+  <!-- Text -->
+  <text x="600" y="240" font-family="'Brush Script MT', 'Dancing Script', cursive, sans-serif" font-size="74" font-weight="bold" fill="#C2185B" text-anchor="middle">
+    Our Little Space 💕
+  </text>
+  <text x="600" y="320" font-family="'Nunito', 'Segoe UI', sans-serif" font-size="28" font-weight="600" fill="#661034" text-anchor="middle">
+    A Private Romantic Sanctuary Just For Us
+  </text>
+
+  <!-- Tagline pill -->
+  <rect x="360" y="370" width="480" height="64" rx="32" fill="#FF4D8D"/>
+  <text x="600" y="412" font-family="'Nunito', 'Segoe UI', sans-serif" font-size="22" font-weight="700" fill="#FFFFFF" text-anchor="middle">
+    Realtime Chat • Love Notes • Shared Memories 💌
+  </text>
+</svg>
